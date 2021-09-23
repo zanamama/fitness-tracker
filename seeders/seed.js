@@ -51,7 +51,7 @@ const workoutSeed = [
     day: new Date(new Date().setDate(new Date().getDate() - 6)),
     exercises: [
       {
-        type: 'cardio',
+        type: 'Cardio',
         name: 'Running',
         duration: 25,
         distance: 4,
@@ -65,7 +65,7 @@ const workoutSeed = [
         type: 'resistance',
         name: 'Bench Press',
         duration: 20,
-        weight: 285,
+        weight: 300,
         reps: 10,
         sets: 4,
       },
