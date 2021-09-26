@@ -1,4 +1,4 @@
-const calculateDuration = (workouts) => {
+const addDuration = (workouts) => {
 	const modifiedWorkouts = workouts.map((workout) => {
 		let sumDuration = 0;
 		workout.exercises.map((exercise) => {
@@ -10,4 +10,4 @@ const calculateDuration = (workouts) => {
 	return modifiedWorkouts;
 };
 
-module.exports = { calculateDuration };
+module.exports = { addDuration };
