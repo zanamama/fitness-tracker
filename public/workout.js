@@ -1,5 +1,5 @@
 async function initWorkout() {
-  const lastWorkout = await API.getLastWorkout();
+  const lastWorkout = await API.retreiveLastWorkout();
   console.log("Last workout:", lastWorkout);
   if (lastWorkout) {
     document
@@ -9,17 +9,17 @@ async function initWorkout() {
     const workoutSummary = {
       date: formatDate(lastWorkout.day),
       totalDuration: lastWorkout.totalDuration,
-      numExercises: lastWorkout.exercises.length,
-      ...tallyExercises(lastWorkout.exercises)
+      allExercisesPerformed: lastWorkout.exercises.length,
+      ...addExercises(lastWorkout.exercises),
     };
 
     renderWorkoutSummary(workoutSummary);
   } else {
-    renderNoWorkoutText()
+    renderNoWorkoutText();
   }
 }
 
-function tallyExercises(exercises) {
+function addExercises(exercises) {
   const tallied = exercises.reduce((acc, curr) => {
     if (curr.type === "resistance") {
       acc.totalWeight = (acc.totalWeight || 0) + curr.weight;
@@ -38,7 +38,7 @@ function formatDate(date) {
     weekday: "long",
     year: "numeric",
     month: "long",
-    day: "numeric"
+    day: "numeric",
   };
 
   return new Date(date).toLocaleDateString(options);
@@ -47,21 +47,21 @@ function formatDate(date) {
 function renderWorkoutSummary(summary) {
   const container = document.querySelector(".workout-stats");
 
-  const workoutKeyMap = {
+  const workoutMap = {
     date: "Date",
     totalDuration: "Total Workout Duration",
-    numExercises: "Exercises Performed",
+    allExercisesPerformed: "Exercises Performed",
     totalWeight: "Total Weight Lifted",
     totalSets: "Total Sets Performed",
     totalReps: "Total Reps Performed",
-    totalDistance: "Total Distance Covered"
+    totalDistance: "Total Distance Covered",
   };
 
-  Object.keys(summary).forEach(key => {
+  Object.keys(summary).forEach((key) => {
     const p = document.createElement("p");
     const strong = document.createElement("strong");
 
-    strong.textContent = workoutKeyMap[key];
+    strong.textContent = workoutMap[key];
     const textNode = document.createTextNode(`: ${summary[key]}`);
 
     p.appendChild(strong);
@@ -75,7 +75,7 @@ function renderNoWorkoutText() {
   const container = document.querySelector(".workout-stats");
   const p = document.createElement("p");
   const strong = document.createElement("strong");
-  strong.textContent = "You have not created a workout yet!"
+  strong.textContent = "You have not created a workout yet!";
 
   p.appendChild(strong);
   container.appendChild(p);
