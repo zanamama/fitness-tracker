@@ -22,6 +22,20 @@ router.get("/api/workouts", (req, res) => {
 
 //Put
 
+router.put('/api/workouts/:id', ({ params, body}, res) = {
+    Workouts.findOneAndUpdate(
+        { _id: params.id},
+        { $push: {exercises: body}}, 
+        { new: true},
+    )
+    .then(updatedExercise) => {
+        res.join(updatedExercise);
+    })
+    .catch(err => {
+        res.join(err)
+    })
+});
+
 //Post
 
 //Get
