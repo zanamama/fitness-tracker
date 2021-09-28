@@ -1,11 +1,11 @@
 const router = require("express").Router();
-const Workouts = require("../models/workouts");
+const Workout = require("../models/workout");
 
 //4 routes needed
 
 //Get
 router.get("/api/workouts", (req, res) => {
-  Workouts.find({})
+  Workout.find({})
     .then((workouts) => {
       const lastWorkout = workouts[workouts.length - 1];
       let sum = 0;
@@ -22,26 +22,40 @@ router.get("/api/workouts", (req, res) => {
 
 //Put
 
-router.put('/api/workouts/:id', ({ params, body}, res) = {
-    Workouts.findOneAndUpdate(
-        { _id: params.id},
-        { $push: {exercises: body}}, 
-        { new: true},
-    )
-    .then(updatedExercise) => {
-        res.join(updatedExercise);
+router.put("/api/workouts/:id", ({ params, body }, res) => {
+  Workout.findOneAndUpdate(
+    { _id: params.id },
+    { $push: { exercises: body } },
+    { new: true }
+  )
+    .then((updatedExercise) => {
+      res.json(updatedExercise);
     })
-    .catch(err => {
-        res.join(err)
-    })
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 //Post
 
 //Get
 
-router.get("/", (req, res) => {
-  res.json("Updated Exercise");
+router.get("/api/workouts/range", (req, res) => {
+  Workout.find({})
+    .then((workouts) => {
+      console.log(workouts);
+      workouts.forEach((workout) => {
+        let sum = 0;
+        workout.exercises.forEach((exercise) => {
+          sum += exercise.duration;
+        });
+        workout.totalDuration = sum;
+      });
+      res.json(workouts);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
 });
 
 module.exports = router;
