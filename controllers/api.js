@@ -38,6 +38,16 @@ router.put("/api/workouts/:id", ({ params, body }, res) => {
 
 //Post
 
+router.post("/api/workouts", ({ body }, res) => {
+  Workout.create(body)
+    .then((newWorkout) => {
+      res.json(newWorkout);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
 //Get
 
 router.get("/api/workouts/range", (req, res) => {
